@@ -1,8 +1,13 @@
 package com.example.appdeclase
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -93,10 +98,28 @@ class Permisos : AppCompatActivity() {
             PERMISSION_CAMERA -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permiso de cámara concedido", Toast.LENGTH_SHORT).show()
+                    val pickImage = Intent(Intent.ACTION_PICK)
+                    pickImage.type = "image/*"
+                    startActivityForResult(pickImage, 100)
                 } else {
                     Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+    private fun takePicture() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, 1)
+        }catch (e: ActivityNotFoundException) {
+            e.message?.let { Log.e("Permisos", it) } }
+        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1 && resultCode == RESULT_OK) {
+            val extras: Bundle? = data?.extras
+            val imageBitmap = extras?.get("data") as android.graphics.Bitmap
+            binding.PermisoCamara.setImageBitmap(imageBitmap)
         }
     }
 
