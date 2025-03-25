@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">App de clase</string>
+    <string-array name="nivelEducativo">
+        <item>Primaria</item>
+        <item>Bachiller</item>
+        <item>Técnico</item>
+        <item>Profesional</item>
+        <item>Maestría</item>
+        <item>Doctorado</item>
+        <item>Postdoctorado</item>
+    </string-array>
+</resources>
